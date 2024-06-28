@@ -2,8 +2,10 @@ package business;
 
 import entity.Department;
 import entity.Employee;
+import  static business.DepartmentBusiness.departments;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EmployeeBusiness implements IEmployeeDesign{
     public static List<Employee> employees = new ArrayList<>();
@@ -17,21 +19,45 @@ public class EmployeeBusiness implements IEmployeeDesign{
 
     @Override
     public int calEmployeeAvg() {
-        Map<Department, Integer> departments = new HashMap<>();
-        for(Employee employee : employees){
-            Department department = employee.getDepartment();
-            if(!departments.containsKey(department))departments.put(department, 1);
-            else departments.put(department, departments.get(department)+1);
-        }
-        int totalDepartment = departments.size();
-        int totalEmployees = employees.size();
-        return (int) totalEmployees / totalDepartment;
+        return employees.size()/departments.size();
     }
 
     @Override
-    public List<Map.Entry<Department, Integer>> mostCrowded() {
-        return Collections.emptyList();
+    public Set<Map.Entry<Department, Integer>> mostCrowded() {
+        // B1 : input : phòng ban, nhân viên
+        // Tính số lượng nhân viên của mỗi phòng
+        // Phân loại các nhân viên theo phòng ban
+        Map<Department, Integer> map = new HashMap<>();
+
+        for (Employee e: employees){
+            if (map.containsKey(e.getDepartment())){
+                // có tồn tại trong map
+                map.put(e.getDepartment(), map.get(e.getDepartment())+1);
+            }else {
+                // chưa tồn tại
+                map.put(e.getDepartment(),1);
+            }
+        }
+
+        // sắp xếp và giới hạn 5 bản ghi
+       return map
+               .entrySet() // trả về 1 set Các Entry
+               .stream() // mở Stream để duyệt
+               .sorted((o1, o2) ->o2.getValue().compareTo(o1.getValue())) // sắp xê theo value giảm dân
+               .limit(5) // giới hạn 5 bản ghi
+               .collect(Collectors.toSet()); // đóng gói các phần tử trong stream thành 1 Set
+
     }
+//    private Integer totalEmployeesByDepartment(Department department) {
+//        return employees.stream().mapToInt(employee ->employee.getDepartment().equals(department)?1:0).sum();
+////        Integer total = 0;
+////        for (Employee employee : employees) {
+////            if (employee.getDepartment().equals(department)){
+////                total++;
+////            }
+////        }
+////        return total;
+//    }
 
     @Override
     public Employee manageMostEmploy() {

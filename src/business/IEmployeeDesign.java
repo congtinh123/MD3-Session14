@@ -4,13 +4,14 @@ import entity.Department;
 import entity.Employee;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface IEmployeeDesign extends IGenericDesign<Employee, String> {
     //    Thống kê số lượng nhân viên trung bình của mỗi phòng
     int calEmployeeAvg();
 
     // Tìm ra 5 phòng có số lượng nhân viên đông nhất
-    List<Map.Entry<Department, Integer>> mostCrowded();
+    Set<Map.Entry<Department, Integer>> mostCrowded();
 
     // Tìm ra người quản lý nhiều nhân viên nhất
     Employee manageMostEmploy();
