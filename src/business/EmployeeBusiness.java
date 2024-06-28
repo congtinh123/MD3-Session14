@@ -84,7 +84,10 @@ public class EmployeeBusiness implements IEmployeeDesign{
 
     @Override
     public List<Employee> employeeAgeMax() {
-        return Collections.emptyList();
+        // danh sach 5 người cao tuổi nhất
+        return employees.stream().sorted(Comparator.comparing(Employee::getBirthday))
+                .limit(5)
+                .collect(Collectors.toList());
     }
 
     @Override
