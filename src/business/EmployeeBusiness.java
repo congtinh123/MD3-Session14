@@ -61,6 +61,24 @@ public class EmployeeBusiness implements IEmployeeDesign{
 
     @Override
     public Employee manageMostEmploy() {
+       // Người quản lí nhiều nhân viên nhất
+        Map<Employee, Integer> map = new HashMap<>();
+
+        for (Employee e: employees){
+            if (map.containsKey(e.getManager())){
+                // có tồn tại trong map
+               map.put(e.getManager(), map.get(e.getManager())+1);
+            }else {
+                // chưa tồn tại
+                map.put(e.getManager(),1);
+            }
+        }
+        Map.Entry<Employee,Integer> entry = map.entrySet().stream()
+                .min((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
+                .orElse(null);
+        if (entry!=null){
+            return entry.getKey();
+        }
         return null;
     }
 
